@@ -21,6 +21,10 @@ trait MysqliMockTrait
 
                 $mysqliResult = $this->getMockBuilder('mysqli_result')
                     ->setMethods(['fetch_array'])
+                    /*
+                     * Comment the previous line and uncomment the next line to
+                     * introduce generic getter mockup
+                     */
                     //->setMethods(['fetch_array', '__get'])
                     ->disableOriginalConstructor()
                     ->getMock();
@@ -33,6 +37,7 @@ trait MysqliMockTrait
                         return isset($results[$i]) ? $results[$i++] : false;
                     }));
 
+                // Uncomment the following to mock the generic getter
                 /*
                 $mysqliResult
                     ->expects($this->any())
@@ -41,6 +46,7 @@ trait MysqliMockTrait
                     ->will($this->returnValue(count($results)));
                 */
 
+                // Uncomment the following to add a property using reflections
                 /*
                 $reflection = new \ReflectionClass($mysqliResult);
                 $numRowsProperty = $reflection->getProperty('num_rows');

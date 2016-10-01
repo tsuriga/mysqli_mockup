@@ -18,6 +18,9 @@ class UserService
     {
         $userResult = $this->getUserSet($offset, $limit);
 
+        // Uncomment this to introduce access to a public read-only property
+        // $userResult->num_rows;
+
         while ($row = $userResult->fetch_array()) {
             yield new User($row['name']);
         }
