@@ -32,6 +32,18 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @dataProvider mysqlMockProvider
+     * @expectedException \Exception
+     */
+    public function testGetUsersThrowsAnExceptionWhenLimitIsLargerThanResults(
+        $databaseMock
+    ) {
+        $this->assertUsersFound(
+            $databaseMock, 4, 2, ['Rick']
+        );
+    }
+
     private function assertUsersFound(
         MysqlDatabase $databaseMock,
         int $offset,
@@ -70,6 +82,9 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
             ],
             'SELECT name FROM user LIMIT 2 OFFSET 3' => [
                 ['name' => 'Ann'],
+                ['name' => 'Rick'],
+            ],
+            'SELECT name FROM user LIMIT 2 OFFSET 4' => [
                 ['name' => 'Rick'],
             ],
         ];
