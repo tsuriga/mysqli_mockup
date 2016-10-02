@@ -18,8 +18,12 @@ class UserService
     {
         $userResult = $this->getUserSet($offset, $limit);
 
-        // Uncomment this to introduce access to a public read-only property
-        // $userResult->num_rows;
+        // Uncomment the condition to introduce access to a read-only property
+        /*
+        if ($limit > $userResult->num_rows) {
+            throw new \Exception('Not enough results to meet the limit');
+        }
+        */
 
         while ($row = $userResult->fetch_array()) {
             yield new User($row['name']);
