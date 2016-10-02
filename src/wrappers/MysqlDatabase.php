@@ -14,6 +14,6 @@ class MysqlDatabase
 
     public function query(string $query): MysqlResult
     {
-        return new MysqlResult($this->db($query));
+        return new MysqlResult($this->db->query($query));
     }
 }
