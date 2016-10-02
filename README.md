@@ -26,7 +26,10 @@ mock it for unit tests, I might suggest creating a wrapper for MySQLi and
 mocking the wrapper instead as an easier alternative.
 
 The master branch of this repository uses a wrapper as dependency and mocks that
-in the unit tests.
+in the unit tests. It's not a full wrapper around MySQLi but it rather only
+mocks the properties that the code uses, here ```fetch_array``` method and
+```num_rows``` property. You'll have to create your own wrapper and mock for it
+but hopefully this'll give you an idea how to do it.
 
 ## Running the tests
 
