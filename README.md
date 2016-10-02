@@ -7,10 +7,10 @@ that. PHP 7 because it's da future yo.
 **Long version:**
 
 Recently I was given a test task where a class took a container object as its
-dependency. I thought I was being clever switching it to mysqli_result so that I
-could read in the results one by one and yield objects from the data on the fly
-using generators. However, mocking mysqli objects turned out to be a bit more
-difficult than I expected.
+dependency. I thought I was being clever switching it to ```mysqli_result``` so
+that I could read in the results one by one and yield objects from the data on
+the fly using generators. However, mocking ```mysqli``` objects turned out to be
+a bit more difficult than I expected.
 
 If your code uses only methods and not any public properties of mysqli objects,
 mocking the objects works just fine. But, if you try to set any of the known
@@ -37,7 +37,7 @@ Requires PHP 7.
 
 - Clone the repository
 - [Download Composer](https://getcomposer.org/download/) into the repository
-  directory.
+  directory
 - Run the following in the repository directory:
 
 ```sh
