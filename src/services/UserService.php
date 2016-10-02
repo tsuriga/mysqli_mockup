@@ -3,27 +3,36 @@
 namespace app\services;
 
 use app\models\User;
+use app\wrappers\MysqlDatabase;
+use app\wrappers\MysqlResult;
 
 class UserService
 {
-    /** @var mysqli */
+    /** @var MysqlDatabase */
     private $db;
 
-    public function __construct(\mysqli $db)
+    public function __construct(MysqlDatabase $db)
     {
         $this->db = $db;
     }
 
+    /**
+     * @throws \Exception If the limit is too high for the result count
+     */
     public function getUsers(int $offset = 0, int $limit = 0): \Generator
     {
         $userResult = $this->getUserSet($offset, $limit);
 
-        while ($row = $userResult->fetch_array()) {
+        if ($limit > $userResult->getNumRows()) {
+            throw new \Exception('Not enough results to meet the limit');
+        }
+
+        while ($row = $userResult->fetchArray()) {
             yield new User($row['name']);
         }
     }
 
-    private function getUserSet(int $offset, int $limit): \mysqli_result
+    private function getUserSet(int $offset, int $limit): MysqlResult
     {
         $sqlSelectNames = rtrim(sprintf(
             'SELECT name FROM user %s %s',

@@ -4,42 +4,43 @@ namespace tests\app\services;
 
 use app\services\UserService;
 use app\models\User;
+use app\wrappers\MysqlDatabase;
 
-use tests\app\MysqliMockTrait;
+use tests\app\MysqlWrapperMockTrait;
 
 class UserServiceTest extends \PHPUnit_Framework_TestCase
 {
-    use MysqliMockTrait;
+    use MysqlWrapperMockTrait;
 
     /**
-     * @dataProvider mysqliMockProvider
+     * @dataProvider mysqlMockProvider
      */
-    public function testGetUsersReturnsAllUsersWithoutLimits($mysqliMock)
+    public function testGetUsersReturnsAllUsersWithoutLimits($databaseMock)
     {
         $this->assertUsersFound(
-            $mysqliMock, 0, 0, ['John', 'Pam', 'Leslie', 'Ann', 'Rick']
+            $databaseMock, 0, 0, ['John', 'Pam', 'Leslie', 'Ann', 'Rick']
         );
     }
 
     /**
-     * @dataProvider mysqliMockProvider
+     * @dataProvider mysqlMockProvider
      */
-    public function testGetUsersReturnsASubsetOfUsersWithLimits($mysqliMock)
+    public function testGetUsersReturnsASubsetOfUsersWithLimits($databaseMock)
     {
         $this->assertUsersFound(
-            $mysqliMock, 3, 2, ['Ann', 'Rick']
+            $databaseMock, 3, 2, ['Ann', 'Rick']
         );
     }
 
     private function assertUsersFound(
-        \mysqli $mysqliMock,
+        MysqlDatabase $databaseMock,
         int $offset,
         int $limit,
         array $expectedUsers
     ) {
         // Arrange
         $userCounter = 0;
-        $userService = new UserService($mysqliMock);
+        $userService = new UserService($databaseMock);
 
         // Act
         $users = $userService->getUsers($offset, $limit);
@@ -57,7 +58,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(count($expectedUsers), $userCounter);
     }
 
-    public function mysqliMockProvider(): array
+    public function mysqlMockProvider(): array
     {
         $mockData = [
             'SELECT name FROM user' => [
@@ -73,10 +74,10 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $mysqliMock = $this->getMysqliMock($mockData);
+        $databaseMock = $this->getMysqlWrapperMock($mockData);
 
         return [
-            [$mysqliMock]
+            [$databaseMock]
         ];
     }
 }
