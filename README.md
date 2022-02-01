@@ -2,7 +2,7 @@
 
 **TL;DR:** If you need to mock public properties as well, wrap MySQLi and mock
 that wrapper instead. Check the code in the master branch for how to achieve
-that. PHP 7 because it's da future yo.
+that. PHP version at the time of writing: 7.
 
 **Long version:**
 
@@ -13,20 +13,20 @@ the fly using generators. However, mocking ```mysqli``` objects turned out to be
 a bit more difficult than I expected.
 
 If your code uses only methods and not any public properties of mysqli objects,
-mocking the objects works just fine. But, if you try to set any of the known
+mocking the objects works just fine. But if you try to set any of the known
 public properties for the mocks, e.g. ```$field_count``` or ```$num_rows``` in
 ```mysqli_result``` object, you'll run into trouble. This is because those are
 by design read-only properties.
 
 I tried assigning the ```mysqli_result::$num_row``` property both via the
 Reflection API and by adding my own mocked magic-method getter to the mocked
-class, with little success to either method. I didn't take a deep look into why
+class, with little success with either method. I didn't take a deep look into why
 exactly the latter method fails but if you're using MySQLi extension and need to
-mock it for unit tests, I might suggest creating a wrapper for MySQLi and
+mock it for unit tests, I would recommend creating a wrapper for MySQLi and
 mocking the wrapper instead as an easier alternative.
 
 The master branch of this repository uses a wrapper as dependency and mocks that
-in the unit tests. It's not a full wrapper around MySQLi but it rather only
+in the unit tests. It's not a full wrapper around MySQLi but rather it only
 mocks the properties that the code uses, here ```fetch_array``` method and
 ```num_rows``` property. You'll have to create your own wrapper and mock for it
 but hopefully this'll give you an idea how to do it.
